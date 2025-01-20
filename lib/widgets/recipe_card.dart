@@ -3,9 +3,8 @@ import '../models/recipe.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
-  final VoidCallback onTap;
 
-  RecipeCard({required this.recipe, required this.onTap});
+  RecipeCard({required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,6 @@ class RecipeCard extends StatelessWidget {
         leading: Image.network(recipe.imageUrl, width: 60, height: 60, fit: BoxFit.cover),
         title: Text(recipe.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         subtitle: Text(recipe.description, maxLines: 2, overflow: TextOverflow.ellipsis),
-        onTap: onTap,
       ),
     );
   }

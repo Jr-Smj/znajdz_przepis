@@ -9,8 +9,11 @@ class ApiService {
     'x-rapidapi-host': 'tasty.p.rapidapi.com',
   };
 
-  static Future<List<Recipe>> fetchRecipes() async {
-    final response = await http.get(Uri.parse('$_baseUrl?from=0&size=20&tags=under_30_minutes'), headers: _headers);
+  static Future<List<Recipe>> fetchRecipes(String query) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl?from=0&size=20&q=$query'),
+      headers: _headers,
+    );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

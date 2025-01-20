@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'screens/search_screen.dart';
 
 void main() {
   runApp(ZnajdzPrzepisApp());
@@ -11,10 +11,9 @@ class ZnajdzPrzepisApp extends StatelessWidget {
     return MaterialApp(
       title: 'Znajdź Przepis',
       theme: ThemeData(
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: SearchScreen(),
     );
   }
 }
