@@ -1,22 +1,15 @@
 class Recipe {
-  final String title;
+  final String name;
   final String imageUrl;
-  final List<String> ingredients;
+  final String description;
 
-  Recipe({
-    required this.title,
-    required this.imageUrl,
-    required this.ingredients,
-  });
+  Recipe({required this.name, required this.imageUrl, required this.description});
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
-      title: json['title'] ?? 'No title available',
-      imageUrl: json['image'] ?? '',
-      ingredients: json['extendedIngredients'] != null
-          ? List<String>.from(json['extendedIngredients']
-          .map((ingredient) => ingredient['original'] ?? 'Unknown ingredient'))
-          : [],
+      name: json['name'] ?? 'Bez nazwy',
+      imageUrl: json['thumbnail_url'] ?? '',
+      description: json['description'] ?? 'Brak opisu',
     );
   }
 }

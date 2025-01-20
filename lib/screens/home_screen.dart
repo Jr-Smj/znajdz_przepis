@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
-import '../models/recipe.dart';
 import '../services/api_service.dart';
+import '../models/recipe.dart';
+import '../widgets/recipe_card.dart';
+import 'recipe_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Recipe> _recipes = [];
+  late Future<List<Recipe>> recipes;
 
-  Future<void> _searchRecipes(String query) async {
-    try {
-      final recipes = await ApiService.searchRecipes(query);
-      setState(() {
-        _recipes = recipes;
-      });
-    } catch (e) {
-      print('Błąd w _searchRecipes: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Nie udało się załadować przepisów. Spróbuj ponownie.')),
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    recipes = ApiService.fetchRecipes();
   }
 
   @override
@@ -32,33 +24,35 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('Znajdź Przepis'),
       ),
-      body: Column(
-        children: [
-          TextField(
-            onSubmitted: (value) {
-              _searchRecipes(value);
-            },
-            decoration: InputDecoration(
-              labelText: 'Wyszukaj przepis',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _recipes.length,
+      body: FutureBuilder<List<Recipe>>(
+        future: recipes,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Błąd: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('Nie znaleziono przepisów'));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                final recipe = _recipes[index];
-                return ListTile(
-                  title: Text(recipe.title),
-                  subtitle: Text('Składniki: ${recipe.ingredients.join(", ")}'),
-                  leading: recipe.imageUrl.isNotEmpty
-                      ? Image.network(recipe.imageUrl, width: 50, height: 50)
-                      : null,
+                final recipe = snapshot.data![index];
+                return RecipeCard(
+                  recipe: recipe,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RecipeDetailsScreen(recipe: recipe),
+                      ),
+                    );
+                  },
                 );
               },
-            ),
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
   }

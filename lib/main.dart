@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ZnajdzPrzepisApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class ZnajdzPrzepisApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Znajdz przepis',
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: const HomeScreen(),
+      title: 'Znajdź Przepis',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: HomeScreen(),
     );
   }
 }
