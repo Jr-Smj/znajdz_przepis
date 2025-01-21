@@ -1,15 +1,19 @@
 class Recipe {
   final String name;
-  final String imageUrl;
   final String description;
+  final String imageUrl;
 
-  Recipe({required this.name, required this.imageUrl, required this.description});
+  Recipe({
+    required this.name,
+    required this.description,
+    required this.imageUrl,
+  });
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
-      name: json['name'] ?? 'Bez nazwy',
-      imageUrl: json['thumbnail_url'] ?? '',
-      description: json['description'] ?? 'Brak opisu',
+      name: json['name'] ?? 'Unknown Title',
+      description: json['description'] ?? 'No description available',
+      imageUrl: json['imageUrl'] ?? '',
     );
   }
 }
