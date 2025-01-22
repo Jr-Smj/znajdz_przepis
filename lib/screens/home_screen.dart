@@ -5,6 +5,7 @@ import '../screens/recipe_detail_screen.dart';
 import '../blocs/recipe_event.dart';
 import '../blocs/recipe_state.dart';
 import '../repositories/recipe_repository.dart';
+import '../widgets/recipe_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -101,81 +102,22 @@ class RecipeSearch extends StatelessWidget {
                   ),
                 );
               }
-              return const Center(child: Text('Search for a recipe'));
+              // Default state: Display the logo
+              return Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(80),
+                  child: Image.asset(
+                    'assets/images/Logo.png',
+                    width: 350,
+                    height: 350,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
             },
           ),
         ),
       ],
-    );
-  }
-}
-
-class RecipeCard extends StatelessWidget {
-  final dynamic recipe;
-
-  RecipeCard({required this.recipe});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RecipeDetailScreen(recipe: recipe),
-          ),
-        );
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        elevation: 5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                child: Image.network(
-                  recipe.imageUrl ?? '',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.broken_image, size: 50),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    recipe.name ?? 'No name',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    recipe.description ?? 'No description',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
