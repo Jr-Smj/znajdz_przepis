@@ -17,7 +17,6 @@ class RecipeRepository {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
-      // Sprawdzamy, czy wyniki zawierają listę przepisów
       if (data['results'] != null) {
         return (data['results'] as List<dynamic>)
             .map((json) => Recipe.fromJson(json))

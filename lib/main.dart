@@ -9,7 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Znajdź Przepis',
+      debugShowCheckedModeBanner: false,
+      title: 'Find the Recipe',
       theme: ThemeData(
         primaryColor: const Color(0xFF16425B),
         colorScheme: ColorScheme.fromSwatch().copyWith(
