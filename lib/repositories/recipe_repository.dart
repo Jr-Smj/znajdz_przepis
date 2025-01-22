@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../models/recipe.dart'; // Import modelu Recipe
 
 class RecipeRepository {
   final String apiUrl = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
 
-  Future<List<dynamic>> fetchRecipes(String query) async {
+  Future<List<Recipe>> fetchRecipes(String query) async {
     final response = await http.get(
       Uri.parse('$apiUrl&q=$query'),
       headers: {
@@ -15,7 +16,15 @@ class RecipeRepository {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return data['results'] ?? [];
+
+      // Sprawdzamy, czy wyniki zawierają listę przepisów
+      if (data['results'] != null) {
+        return (data['results'] as List<dynamic>)
+            .map((json) => Recipe.fromJson(json))
+            .toList();
+      } else {
+        return [];
+      }
     } else {
       throw Exception('Failed to fetch recipes');
     }

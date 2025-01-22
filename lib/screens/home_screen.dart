@@ -61,7 +61,7 @@ class RecipeSearch extends StatelessWidget {
                   itemCount: state.recipes.length,
                   itemBuilder: (context, index) {
                     final recipe = state.recipes[index];
-                    final recipeName = recipe['name'] ?? 'Brak nazwy';
+                    final recipeName = recipe.name ?? 'Brak nazwy';
                     return ListTile(
                       title: Text(recipeName),
                       onTap: () {
