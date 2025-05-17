@@ -29,17 +29,42 @@ class RecipeDetailScreen extends StatelessWidget {
                 child: Image.network(
                   recipe.imageUrl,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 200,
+                      color: Colors.grey[300],
+                      child: const Center(
+                        child: Icon(
+                          Icons.broken_image,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      height: 200,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
                 ),
               ),
-            const SizedBox(height: 20),
 
+            const SizedBox(height: 20),
 
             Text(
               recipe.description,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
-
 
             if (recipe.ingredients.isNotEmpty)
               Column(

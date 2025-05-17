@@ -17,34 +17,55 @@ class Recipe {
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     List<String> parsedIngredients = [];
-    if (json['ingredients'] is List) {
-      parsedIngredients = List<String>.from(json['ingredients']);
-    } else if (json['sections'] is List) {
-      parsedIngredients = (json['sections'][0]['components'] as List)
-          .map((item) => item['raw_text'] as String)
-          .toList();
-    } else if (json['ingredients'] is String) {
-      parsedIngredients = (json['ingredients'] as String).split('\n');
+
+    try {
+      if (json['ingredients'] is List) {
+        parsedIngredients = List<String>.from(json['ingredients']);
+      } else if (json['sections'] is List && json['sections'].isNotEmpty) {
+        var firstSection = json['sections'][0];
+        if (firstSection['components'] is List) {
+          parsedIngredients = (firstSection['components'] as List)
+              .map((item) => item['raw_text']?.toString() ?? '')
+              .where((text) => text.isNotEmpty)
+              .toList();
+        }
+      } else if (json['ingredients'] is String) {
+        parsedIngredients = (json['ingredients'] as String)
+            .split('\n')
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toList();
+      }
+    } catch (e) {
+      parsedIngredients = [];
     }
 
-    String parsedInstructions;
-    if (json['instructions'] is List) {
-      parsedInstructions = (json['instructions'] as List)
-          .map((item) => item['display_text'])
-          .join('\n');
-    } else if (json['instructions'] is String) {
-      parsedInstructions = json['instructions'];
-    } else {
+    String parsedInstructions = 'No instructions available';
+    try {
+      if (json['instructions'] is List) {
+        parsedInstructions = (json['instructions'] as List)
+            .map((item) => item['display_text']?.toString() ?? '')
+            .where((text) => text.isNotEmpty)
+            .join('\n');
+        if (parsedInstructions.isEmpty) {
+          parsedInstructions = 'No instructions available';
+        }
+      } else if (json['instructions'] is String) {
+        parsedInstructions = json['instructions'];
+      }
+    } catch (e) {
       parsedInstructions = 'No instructions available';
     }
 
     return Recipe(
-      name: json['name'] ?? 'Unknown Title',
-      description: json['description'] ?? 'No description available',
-      imageUrl: json['thumbnail_url'] ?? json['imageUrl'] ?? '',
+      name: json['name']?.toString() ?? 'Unknown Title',
+      description: json['description']?.toString() ?? 'No description available',
+      imageUrl: json['thumbnail_url']?.toString() ??
+          json['imageUrl']?.toString() ??
+          '',
       ingredients: parsedIngredients,
       instructions: parsedInstructions,
-      isFavorite: json['isFavorite'] ?? false,
+      isFavorite: json['isFavorite'] == true,
     );
   }
 
@@ -77,4 +98,3 @@ class Recipe {
     };
   }
 }
-

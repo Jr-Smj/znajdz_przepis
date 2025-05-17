@@ -33,16 +33,44 @@ class HomeScreen extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => RecipeBloc(recipeRepository: RecipeRepository()),
-        child: RecipeSearch(),
+        child: const RecipeSearch(),
       ),
     );
   }
 }
 
-class RecipeSearch extends StatelessWidget {
+class RecipeSearch extends StatefulWidget {
+  const RecipeSearch({Key? key}) : super(key: key);
+
+  @override
+  State<RecipeSearch> createState() => _RecipeSearchState();
+}
+
+class _RecipeSearchState extends State<RecipeSearch> {
   final TextEditingController _controller = TextEditingController();
 
-  RecipeSearch({Key? key}) : super(key: key);
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onSearch() {
+    final query = _controller.text.trim();
+    if (query.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a search query.')),
+      );
+      return;
+    }
+    try {
+      BlocProvider.of<RecipeBloc>(context).add(FetchRecipes(query));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error while searching: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +93,7 @@ class RecipeSearch extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.grey[200],
                   ),
+                  onSubmitted: (_) => _onSearch(),
                 ),
               ),
               const SizedBox(width: 8),
@@ -75,9 +104,7 @@ class RecipeSearch extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
-                onPressed: () {
-                  BlocProvider.of<RecipeBloc>(context).add(FetchRecipes(_controller.text));
-                },
+                onPressed: _onSearch,
                 child: const Icon(Icons.search),
               ),
             ],
@@ -117,7 +144,6 @@ class RecipeSearch extends StatelessWidget {
                 );
               }
 
-              // Default state: Display the logo
               return Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(80),

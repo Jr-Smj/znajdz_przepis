@@ -20,7 +20,12 @@ class _RecipeCardState extends State<RecipeCard> {
   void initState() {
     super.initState();
     favoritesBox = Hive.box('favoritesBox');
-    isFavorite = _checkIfFavorite();
+    try {
+      isFavorite = _checkIfFavorite();
+    } catch (e) {
+      _showError("Error checking favorites: $e");
+      isFavorite = false;
+    }
   }
 
   bool _checkIfFavorite() {
@@ -30,25 +35,38 @@ class _RecipeCardState extends State<RecipeCard> {
   }
 
   void _toggleFavorite() {
-    setState(() {
-      if (isFavorite) {
-        final keyToRemove = favoritesBox.keys.firstWhere(
-              (key) {
-            final item = favoritesBox.get(key);
-            return item['name'] == widget.recipe.name &&
-                item['description'] == widget.recipe.description;
-          },
-          orElse: () => null,
-        );
-        if (keyToRemove != null) {
-          favoritesBox.delete(keyToRemove);
+    try {
+      setState(() {
+        if (isFavorite) {
+          final keyToRemove = favoritesBox.keys.firstWhere(
+                (key) {
+              final item = favoritesBox.get(key);
+              return item['name'] == widget.recipe.name &&
+                  item['description'] == widget.recipe.description;
+            },
+            orElse: () => null,
+          );
+          if (keyToRemove != null) {
+            favoritesBox.delete(keyToRemove);
+          }
+          isFavorite = false;
+        } else {
+          favoritesBox.add(widget.recipe.toJson());
+          isFavorite = true;
         }
-        isFavorite = false;
-      } else {
-        favoritesBox.add(widget.recipe.toJson());
-        isFavorite = true;
-      }
-    });
+      });
+    } catch (e) {
+      _showError("Error updating favorites: $e");
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override
@@ -58,8 +76,7 @@ class _RecipeCardState extends State<RecipeCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                RecipeDetailScreen(recipe: widget.recipe),
+            builder: (context) => RecipeDetailScreen(recipe: widget.recipe),
           ),
         );
       },
@@ -81,7 +98,8 @@ class _RecipeCardState extends State<RecipeCard> {
                     height: 160,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                      borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(15)),
                       image: DecorationImage(
                         image: NetworkImage(widget.recipe.imageUrl),
                         fit: BoxFit.cover,

@@ -3,16 +3,74 @@ import 'package:hive/hive.dart';
 import '../models/recipe.dart';
 import 'recipe_detail_screen.dart';
 
-class FavoriteRecipesScreen extends StatelessWidget {
+class FavoriteRecipesScreen extends StatefulWidget {
   const FavoriteRecipesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final Box favoritesBox = Hive.box('favoritesBox');
+  _FavoriteRecipesScreenState createState() => _FavoriteRecipesScreenState();
+}
 
-    final recipes = favoritesBox.values
-        .map((json) => Recipe.fromJson(Map<String, dynamic>.from(json)))
-        .toList();
+class _FavoriteRecipesScreenState extends State<FavoriteRecipesScreen> {
+  List<Recipe> recipes = [];
+  String? errorMessage;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadFavorites();
+  }
+
+  Future<void> loadFavorites() async {
+    try {
+      final Box favoritesBox = Hive.box('favoritesBox');
+      final loadedRecipes = favoritesBox.values
+          .map((json) => Recipe.fromJson(Map<String, dynamic>.from(json)))
+          .toList();
+
+      setState(() {
+        recipes = loadedRecipes;
+        errorMessage = null;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = "An error occurred while loading your favorite recipes: $e";
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Favorite recipe')),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (errorMessage != null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Favorite recipe')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(errorMessage!, style: const TextStyle(color: Colors.red), textAlign: TextAlign.center),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: loadFavorites,
+                  child: const Text('Try again'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(

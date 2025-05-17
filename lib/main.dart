@@ -5,10 +5,13 @@ import 'screens/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Hive.initFlutter();
-  await Hive.openBox('favoritesBox');
-
-  runApp(MyApp());
+  try {
+    await Hive.initFlutter();
+    await Hive.openBox('favoritesBox');
+    runApp(MyApp());
+  } catch (e) {
+    runApp(ErrorApp(errorMessage: 'Database initialization error: $e'));
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -39,6 +42,31 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: HomeScreen(),
+    );
+  }
+}
+
+class ErrorApp extends StatelessWidget {
+  final String errorMessage;
+
+  const ErrorApp({Key? key, required this.errorMessage}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Application error')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.red, fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
