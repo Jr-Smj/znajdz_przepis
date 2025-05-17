@@ -1,13 +1,32 @@
 {
   "project_info": {
-    "project_number": "279276930842",
-    "project_id": "znajdz-przepis-a5e78",
-    "storage_bucket": "znajdz-przepis-a5e78.firebasestorage.app"
+    "project_number": "196295581571",
+    "project_id": "project-wcag",
+    "storage_bucket": "project-wcag.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:279276930842:android:fc2bda7eeab00dd8534ea3",
+        "mobilesdk_app_id": "1:196295581571:android:0e230c4427754584fd60b6",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN6GMq9ENuZdYyRVPCdtwFsI3A0TFTVQw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196295581571:android:278c2db91261301cfd60b6",
         "android_client_info": {
           "package_name": "com.example.znajdz_przepis"
         }
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBoqF7JAXCJxRp7SrbURQo02WMIjP_V0Vs"
+          "current_key": "AIzaSyDN6GMq9ENuZdYyRVPCdtwFsI3A0TFTVQw"
         }
       ],
       "services": {

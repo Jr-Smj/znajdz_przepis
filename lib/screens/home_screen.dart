@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../blocs/recipe_bloc.dart';
-import '../screens/recipe_detail_screen.dart';
 import '../blocs/recipe_event.dart';
 import '../blocs/recipe_state.dart';
 import '../repositories/recipe_repository.dart';
@@ -10,6 +11,10 @@ import 'favorite_recipes_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  void _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +25,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.favorite),
+            tooltip: 'Favorite Recipes',
             onPressed: () {
               Navigator.push(
                 context,
@@ -28,6 +34,11 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Log out',
+            onPressed: () => _logout(context),
           ),
         ],
       ),
@@ -63,13 +74,7 @@ class _RecipeSearchState extends State<RecipeSearch> {
       );
       return;
     }
-    try {
-      BlocProvider.of<RecipeBloc>(context).add(FetchRecipes(query));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error while searching: $e')),
-      );
-    }
+    BlocProvider.of<RecipeBloc>(context).add(FetchRecipes(query));
   }
 
   @override
