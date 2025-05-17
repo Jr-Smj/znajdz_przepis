@@ -6,6 +6,7 @@ import '../blocs/recipe_event.dart';
 import '../blocs/recipe_state.dart';
 import '../repositories/recipe_repository.dart';
 import '../widgets/recipe_card.dart';
+import 'favorite_recipes_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,6 +17,19 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Find the Recipe'),
         backgroundColor: const Color(0xFF16425B),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const FavoriteRecipesScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: BlocProvider(
         create: (_) => RecipeBloc(recipeRepository: RecipeRepository()),
@@ -102,6 +116,7 @@ class RecipeSearch extends StatelessWidget {
                   ),
                 );
               }
+
               // Default state: Display the logo
               return Center(
                 child: ClipRRect(

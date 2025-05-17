@@ -10,7 +10,7 @@ class RecipeRepository {
       Uri.parse('$apiUrl&q=$query'),
       headers: {
         'x-rapidapi-host': 'tasty.p.rapidapi.com',
-        'x-rapidapi-key': '2c84052aacmshd4f2217e5856736p1d6883jsn90f6e460f1fc',
+        'x-rapidapi-key': 'ca8319f3e0mshe8bbbdd65b5de49p13b27bjsnfe99cdc08f4a',
       },
     );
 

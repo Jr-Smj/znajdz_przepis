@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'screens/home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await Hive.openBox('favoritesBox');
+
   runApp(MyApp());
 }
 
@@ -18,8 +24,8 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFD9DCD6),
         textTheme: const TextTheme(
-          headline6: TextStyle(color: Color(0xFF16425B)),
-          bodyText2: TextStyle(color: Color(0xFF2F6690)),
+          titleLarge: TextStyle(color: Color(0xFF16425B)),
+          bodyMedium: TextStyle(color: Color(0xFF2F6690)),
         ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF16425B),
