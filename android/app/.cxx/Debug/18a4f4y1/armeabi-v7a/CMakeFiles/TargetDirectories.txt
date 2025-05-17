@@ -1,0 +1,2 @@
+D:/StudioProjects/Znajdz_przepis/android/app/.cxx/Debug/18a4f4y1/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/StudioProjects/Znajdz_przepis/android/app/.cxx/Debug/18a4f4y1/armeabi-v7a/CMakeFiles/rebuild_cache.dir

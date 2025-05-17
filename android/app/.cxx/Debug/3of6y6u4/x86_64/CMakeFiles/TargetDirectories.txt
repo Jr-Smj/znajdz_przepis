@@ -1,0 +1,2 @@
+C:/Users/Joanna/StudioProjects/znajdz_przepis/android/app/.cxx/Debug/3of6y6u4/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Joanna/StudioProjects/znajdz_przepis/android/app/.cxx/Debug/3of6y6u4/x86_64/CMakeFiles/rebuild_cache.dir
